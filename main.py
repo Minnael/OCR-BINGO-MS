@@ -1,11 +1,22 @@
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 import pytesseract
 from PIL import Image
 import io
 import re
 
 app = FastAPI(title="Bingo OCR Microservice")
+
+# ✅ Habilitar CORS
+origins = ["*"]  # permite qualquer origem; ou coloque apenas seu domínio frontend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 def root():
