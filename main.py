@@ -2,8 +2,7 @@ from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 import pytesseract
-from PIL import Image, ImageEnhance, ImageFilter
-import io
+from PIL import Image
 import re
 
 app = FastAPI(title="Bingo OCR Microservice")
@@ -28,13 +27,6 @@ async def ocr_image(file: UploadFile = File(...)):
         # Ler imagem enviada
         contents = await file.read()
         image = Image.open(io.BytesIO(contents))
-
-         # ===== Pré-processamento =====
-        image = image.convert("L")  # grayscale
-        enhancer = ImageEnhance.Contrast(image)
-        image = enhancer.enhance(2.0)  # aumentar contraste
-        image = image.filter(ImageFilter.MedianFilter(size=3))  # reduzir ruído
-        image = image.point(lambda x: 0 if x < 128 else 255, '1')  # binarização opcional
         
         # OCR usando Tesseract
         text = pytesseract.image_to_string(image, lang='eng+por')
