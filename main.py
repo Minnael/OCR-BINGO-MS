@@ -3,6 +3,7 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 import pytesseract
 from PIL import Image
+import io
 import re
 
 app = FastAPI(title="Bingo OCR Microservice")
